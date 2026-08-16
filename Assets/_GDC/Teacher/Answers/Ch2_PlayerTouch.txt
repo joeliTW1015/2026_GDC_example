@@ -1,0 +1,54 @@
+第 2 章 · Ch2_PlayerTouch.cs 參考解答
+=====================================
+
+TODO 2-A ─ 吃金幣
+------------------
+    if (other.CompareTag("Coin"))
+    {
+        gm.AddScore(coinScore);
+        Destroy(other.gameObject);
+    }
+
+
+TODO 2-B ─ 踩到尖刺
+--------------------
+    if (other.CompareTag("Spike"))
+    {
+        gm.AddScore(-spikePenalty);
+        gm.Fail("踩到尖刺了！回到起點");
+        respawner.Respawn();
+    }
+
+
+TODO 2-C ─ 抵達終點
+--------------------
+    if (other.CompareTag("Goal"))
+    {
+        gm.Clear("過關！你學會 Tag 了");
+    }
+
+
+為什麼要用 CompareTag 而不是 other.tag == "Coin"？
+--------------------------------------------------
+1. CompareTag 比較快（不會產生垃圾記憶體）。
+2. 如果 Tag 名稱拼錯，CompareTag 會直接丟出錯誤告訴你「這個 Tag 不存在」；
+   用 == 比較的話只會安靜地永遠不成立，你會找很久。
+
+
+常見問題
+--------
+Q: 出現「Tag: Coin is not defined」？
+A: 這個 Tag 還沒建立。Edit > Project Settings > Tags and Layers > Tags 加上去。
+   （本教材已經預先幫你建好 Coin / Spike / Goal，出現這個錯誤通常是拼錯字。）
+
+Q: 碰到金幣沒反應？
+A: 三件事要檢查：
+   1. 金幣的 Tag 有沒有指派成 Coin（Inspector 最上方）
+   2. 金幣的 Collider 有沒有勾 Is Trigger
+   3. 玩家身上有沒有 Rigidbody 2D（Trigger 事件需要至少一邊有剛體）
+
+
+加分題
+------
+自己新增一個 Bonus tag，複製一枚金幣改成 Bonus 並換個顏色，
+然後在腳本裡加一段「碰到 Bonus 加 5 分」。

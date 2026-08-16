@@ -1,0 +1,74 @@
+第 5 章 · Ch5_Grapple.cs 參考解答
+==================================
+
+TODO 5-A ─ 滑鼠螢幕座標 → 世界座標
+------------------------------------
+    Vector3 sp = Mouse.current.position.ReadValue();
+    sp.z = -Camera.main.transform.position.z;
+    Vector2 mouseWorld = Camera.main.ScreenToWorldPoint(sp);
+
+（記得把上面那行 Vector2 mouseWorld = transform.position; 改掉，
+  不然會有兩個同名變數）
+
+
+TODO 5-B ─ 往滑鼠方向射線
+---------------------------
+    hit = Physics2D.Raycast(transform.position, dir, maxDistance, grappleLayers);
+
+
+TODO 5-C ─ 啟動繩子
+--------------------
+    joint.connectedAnchor = hit.point;
+    joint.distance = Vector2.Distance(transform.position, hit.point);
+    joint.enabled = true;
+
+然後在 Inspector 把 Grapple Layers 勾成 Grappleable。
+
+
+三個坑，一定要看
+================
+
+坑 1：Auto Configure Distance
+------------------------------
+DistanceJoint2D 的 Auto Configure Distance 預設是「勾選」的，
+意思是「繩長由 Unity 自己算」。這樣你設的 joint.distance 會馬上被蓋掉，
+玩家會瞬間被吸到鉤點上或完全不動。
+
+本教材已經在 Awake() 幫你關掉了（joint.autoConfigureDistance = false），
+但如果你自己從零做一個鉤爪，這是第一個會卡住的地方。
+
+
+坑 2：ScreenToWorldPoint 的 z
+------------------------------
+螢幕座標只有 x, y；世界座標有 x, y, z。
+如果不給 z，Unity 會用 z = 0，換算出來的點會全部落在攝影機自己的平面上，
+結果就是「滑鼠指哪裡都鉤同一個方向」。
+
+正交攝影機放在 z = -10，所以要給 sp.z = 10，也就是 -Camera.main.transform.position.z。
+
+
+坑 3：Grapple Layers
+---------------------
+留空 = 什麼圖層都不偵測 = 永遠鉤不到。
+勾成 Everything = 會鉤到地板和玩家自己，繩子亂接。
+只勾 Grappleable 才對。
+
+
+常見問題
+--------
+Q: 按左鍵完全沒反應？
+A: 先確認 Grapple Layers 勾了 Grappleable，再確認你在鉤點的 13 單位範圍內。
+
+Q: 鉤到了但盪不起來？
+A: 起跳前先跑起來，帶著水平速度再鉤，才有擺盪的動能。
+   按住 W 收繩也可以把自己往上拉。
+
+Q: 繩子看不到？
+A: LineRenderer 的 Material 要用 Sprites/Default，本教材已經設好了。
+
+
+加分題
+------
+1. 讓繩子可以放長（按 S）。
+2. 鉤到的時候在鉤點播放一個放大縮小的動畫。
+3. 加一個「鉤爪冷卻時間」，放開後要等 0.5 秒才能再鉤。

@@ -1,0 +1,53 @@
+第 3 章 · 圖層 Layer 參考解答
+==============================
+
+練習 1 ─ 單向平台（純 Inspector，不用寫程式）
+----------------------------------------------
+1. 選取 OneWayPlatform_Task1（黃色那塊）
+2. Inspector 最上方 Layer → 選 OneWay
+3. Box Collider 2D → 勾選 Used By Effector
+4. Add Component → Platform Effector 2D
+   - 勾選 Use One Way
+   - Surface Arc 設 140（決定「哪個方向算是上面」）
+   - 取消 Use Side Friction（不然側邊會黏住）
+
+結果：從下面跳可以穿過去，站在上面不會掉下來。
+
+
+練習 2 ─ 碰撞矩陣（純設定，不用寫程式）
+----------------------------------------
+Edit > Project Settings > Physics 2D > Layer Collision Matrix
+把 Player 那一列與 GhostWall 那一行交叉處的勾勾取消。
+
+結果：玩家可以直接穿過紅牆。
+
+⚠ 碰撞矩陣是「整個專案」共用的設定，不是單一場景的。
+  改了以後所有場景都會生效，這也是為什麼這一章特地用 GhostWall
+  這個專屬圖層，而不是拿第 2 章的 Hazard 來改。
+
+
+練習 3 ─ Ch3_ProximityDoor.cs 的 TODO 3-A
+-------------------------------------------
+    near = Physics2D.OverlapCircle(transform.position, radius, detectLayers) != null;
+
+然後在 Inspector 把 Detect Layers 勾成 Player。
+
+
+Tag 與 Layer 的差別（重點觀念）
+--------------------------------
+Tag   回答「這是什麼」      → 程式裡用 CompareTag 判斷
+Layer 回答「誰能碰到誰」    → 物理引擎與 Raycast 用來過濾
+
+同一個物件可以有 Tag「Coin」又在 Layer「Pickup」，兩者互不衝突。
+
+
+常見問題
+--------
+Q: 門完全不動？
+A: 九成是 Detect Layers 留空了。留空 = 什麼圖層都不偵測。
+
+Q: 門一直開著不關？
+A: Detect Layers 可能勾成 Everything，連地板都偵測到了。只勾 Player。
+
+Q: 想看偵測範圍？
+A: 選取門，Scene 視窗會畫出青色的圓圈（OnDrawGizmosSelected）。

@@ -1,0 +1,55 @@
+第 4 章 · 射線 Raycast 參考解答
+================================
+
+TODO 4-A ─ Ch4_PlayerMove.cs 的地面偵測
+----------------------------------------
+    RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, checkDistance, groundLayers);
+    return hit.collider != null;
+
+（記得把最後那行 return true; 刪掉或改掉）
+
+然後在 Inspector 把 Ground Layers 勾成 Ground。
+
+
+TODO 4-B ─ Ch4_LaserSensor.cs 的雷射
+--------------------------------------
+    hit = Physics2D.Raycast(transform.position, dir, maxDistance, detectLayers);
+
+然後在 Inspector 把 Detect Layers 勾成 Player。
+
+
+Physics2D.Raycast 的四個參數
+-----------------------------
+    Physics2D.Raycast(起點, 方向, 最長距離, 只偵測哪些圖層)
+
+回傳 RaycastHit2D，重要欄位：
+    hit.collider  → 打到的碰撞器，沒打到就是 null（這是最常用的判斷）
+    hit.point     → 打中的世界座標
+    hit.distance  → 從起點到打中點的距離
+    hit.normal    → 打中表面的法線方向
+
+
+參數調整實驗（一定要親手試）
+-----------------------------
+Check Distance = 0.02  → 太短，站在地上也偵測不到，跳不起來
+Check Distance = 0.15  → 剛好
+Check Distance = 3.0   → 太長，人在半空中也算「站在地上」，又變成無限跳
+
+這就是為什麼遊戲程式的數值要一個一個調出來，而不是憑感覺填。
+
+
+常見問題
+--------
+Q: 完全跳不起來？
+A: 1. Ground Layers 留空了（留空 = 不偵測任何圖層）
+   2. Check Distance 太短
+   3. Feet Offset 太大，射線起點跑到地板底下去了
+
+Q: 看不到射線？
+A: Debug.DrawRay 只會畫在 Scene 視窗，不會出現在 Game 視窗。
+   進 Play Mode 後切到 Scene 分頁就看得到紅線。
+   雷射那條是 LineRenderer，兩邊都看得到。
+
+Q: 射線打到自己？
+A: 玩家在 Player 圖層，Ground Layers 只勾 Ground 就不會打到自己。
+   這就是 LayerMask 的用處。

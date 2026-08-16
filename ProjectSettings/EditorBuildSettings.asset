@@ -6,8 +6,27 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    path: Assets/_GDC/Scenes/Ch0_Sandbox.unity
+    guid: b44d429638ba0dc6e87e584a8dd4c392
+  - enabled: 1
+    path: Assets/_GDC/Scenes/Ch1_Move.unity
+    guid: 74164e707cf33387eb3620cda7207e82
+  - enabled: 1
+    path: Assets/_GDC/Scenes/Ch2_Tag.unity
+    guid: b1be911409801ba6cb7b85e196354491
+  - enabled: 1
+    path: Assets/_GDC/Scenes/Ch3_Layer.unity
+    guid: df94ec9ff7459e652b6a3d3fba833756
+  - enabled: 1
+    path: Assets/_GDC/Scenes/Ch4_Raycast.unity
+    guid: 2d9723823cab956c9a27cf07ee16b118
+  - enabled: 1
+    path: Assets/_GDC/Scenes/Ch5_Grapple.unity
+    guid: 0133bee802ce24321a636dc9b0500344
+  - enabled: 1
+    path: Assets/_GDC/Scenes/Ch6_Create.unity
+    guid: 1573ebe74e05ed73f89b97d3cde1c00f
   m_configObjects:
+    com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

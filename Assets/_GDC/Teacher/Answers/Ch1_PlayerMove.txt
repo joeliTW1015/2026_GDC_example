@@ -1,0 +1,39 @@
+第 1 章 · Ch1_PlayerMove.cs 參考解答
+====================================
+
+TODO 1-A ─ 讀取左右輸入
+------------------------
+    if (kb.aKey.isPressed || kb.leftArrowKey.isPressed)  move = -1f;
+    if (kb.dKey.isPressed || kb.rightArrowKey.isPressed) move =  1f;
+
+
+TODO 1-B ─ 設定水平速度
+------------------------
+    rb.linearVelocityX = move * moveSpeed;
+
+    ⚠ Unity 6 已經把 velocity 改名成 linearVelocity。
+      網路教學上的 rb.velocity.x 在這個版本會編譯失敗。
+      也可以寫成：rb.linearVelocity = new Vector2(move * moveSpeed, rb.linearVelocity.y);
+
+
+TODO 1-C ─ 跳躍
+----------------
+    rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+
+    ForceMode2D.Impulse = 瞬間給一次力（適合跳躍）
+    ForceMode2D.Force   = 持續施力（適合推進器、風）
+
+
+常見問題
+--------
+Q: 玩家一直翻倒？
+A: 選取 Player → Rigidbody 2D → 展開 Constraints → 勾選 Freeze Rotation 的 Z。
+
+Q: 按 D 沒反應？
+A: 確認遊戲視窗有被點過（有焦點），而且你改的是掛在 Player 上的那支腳本。
+
+Q: 出現「Input does not contain a definition for GetKeyDown」？
+A: 本專案只啟用新版 Input System。請用 Keyboard.current，不要用 Input.GetKeyDown。
+
+Q: 可以無限連跳，正常嗎？
+A: 正常，這是刻意留的 bug，第 4 章會用 Raycast 修好它。

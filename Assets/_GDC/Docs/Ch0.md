@@ -1,0 +1,93 @@
+# 第 0 章 · 物理沙盒
+
+**這一章完全不用寫程式。** 目標是讓黃球滾進右邊的籃子。
+
+場景：`Assets/_GDC/Scenes/Ch0_Sandbox.unity`
+
+---
+
+## 先玩一次
+
+按 ▶。球會從左上落下、滾下斜坡，然後**停在缺口前面過不去**。
+這是故意的 —— 有一個參數被設成錯的值，你要找出來。
+
+---
+
+## 三個核心元件
+
+### Rigidbody 2D — 「這個東西受物理影響」
+
+沒有 Rigidbody 2D 的物件不會掉下來、不會被推動。
+
+| 參數 | 意思 | 試試看 |
+|---|---|---|
+| **Body Type** | Dynamic 受力／Kinematic 只能用程式移動／Static 完全不動 | 改成 Static，球就浮在空中 |
+| **Mass** | 質量 | 改成 100 再玩一次，球有跑比較快嗎？ |
+| **Linear Damping** | 空氣阻力，越大越快停下來 | **這就是本章的答案所在** |
+| **Gravity Scale** | 重力倍率，1 = 正常 | 改成 3 看看 |
+
+> 💡 **重要觀念**：把 Mass 改成 100，球的速度**完全不會變**。
+> 這不是 bug —— 真實世界也一樣，鐵球和木球從同高度落下會同時著地。
+> 質量影響的是「碰撞時誰推得動誰」，不是「掉多快」。
+
+### Collider 2D — 「這個東西的形狀」
+
+- **Is Trigger 沒勾** = 實心，會撞到
+- **Is Trigger 有勾** = 可以穿過去，但程式收得到「有東西經過」的通知（第 2 章會用到）
+
+### Physics Material 2D — 「這個表面滑不滑、彈不彈」
+
+`Assets/_GDC/Physics/` 裡有五種，直接拖到 Collider 的 **Material** 欄位：
+
+| 材質 | 摩擦力 | 彈性 |
+|---|---|---|
+| Normal | 0.4 | 0 |
+| Slippery | 0.02 | 0 |
+| Sticky | 1.0 | 0 |
+| Bouncy | 0.3 | 0.6 |
+| SuperBouncy | 0.1 | 0.95 |
+
+畫面下方的**彈跳材質觀察區**有三顆球，材質不同。按 `R` 重玩，看它們彈的高度差多少。
+
+---
+
+## 你的任務
+
+1. 在 Hierarchy 點選 **Ball**
+2. 在 Inspector 找到 **Rigidbody 2D**
+3. 改一個參數 → 按 `R` 重玩 → 觀察結果
+4. 重複，直到球滾進籃子（畫面會出現綠色「過關！」）
+
+**提示**：球停下來太快了，是什麼在阻止它？
+
+---
+
+## 加分題
+
+1. 不改 Linear Damping，只調 Gravity Scale 也能過關嗎？（可以，試試看要多大）
+2. 把 Ball 的 Material 換成 SuperBouncy，會發生什麼事？為什麼進不了籃子？
+3. 把籃子右擋板的 Body Type 改成 Dynamic，會怎樣？
+4. 自己在場景裡加一個斜坡（複製現有的斜坡，改位置和 Rotation Z）
+
+---
+
+## 常見問題
+
+**Q：按 R 沒反應？**
+A：要先點一下 Game 視窗讓它取得焦點。
+
+**Q：球飛太遠直接越過籃子？**
+A：Linear Damping 調成 0 之後，可以再微調 Gravity Scale 讓它剛好停進去。
+或者就這樣也算過關 —— 只要球停在籃子區域內就好。
+
+**Q：Inspector 找不到 Drag 這個欄位？**
+A：Unity 6 改名叫 **Linear Damping** 了。詳見 [README](README.md) 的改名對照表。
+
+**Q：畫面全黑？**
+A：場景裡的 `Global Light 2D` 被刪掉了。用 **GDC > 重建章節 > 第 0 章** 還原。
+
+---
+
+卡住了 → `Assets/_GDC/Teacher/Scenes/Ch0_Sandbox_Answer.unity` 是已經調好的完成版。
+
+下一章 → [Ch1.md](Ch1.md)
